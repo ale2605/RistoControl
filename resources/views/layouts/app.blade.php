@@ -32,7 +32,7 @@
                 @endif
 
                 @if ($user?->hasRole('kitchen', 'owner', 'manager', 'super_admin'))
-                    <span class="block rounded-lg px-3 py-2 text-slate-300">Cucina</span>
+                    <a href="{{ route('kitchen-monitor.index') }}" class="block rounded-lg px-3 py-2 hover:bg-slate-800">Monitor cucina/bar</a>
                 @endif
             </nav>
         </aside>

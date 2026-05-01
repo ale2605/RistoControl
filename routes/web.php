@@ -8,6 +8,7 @@ use App\Http\Controllers\MenuItemController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PublicMenuController;
 use App\Http\Controllers\DiningAreaController;
+use App\Http\Controllers\KitchenMonitorController;
 use App\Http\Controllers\TableController;
 use App\Http\Middleware\EnsureRestaurantContext;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,8 @@ Route::middleware(['auth', EnsureRestaurantContext::class])->group(function () {
     Route::patch('/tables/{table}/quick-status', [TableController::class, 'quickStatus'])->name('tables.quick-status');
     Route::get('/room/dashboard', [TableController::class, 'roomDashboard'])->name('room.dashboard');
     Route::patch('/bookings/{booking}/quick-status', [BookingController::class, 'quickStatus'])->name('bookings.quick-status');
+    Route::get('/kitchen-monitor', [KitchenMonitorController::class, 'index'])->name('kitchen-monitor.index');
+    Route::patch('/kitchen-monitor/items/{item}/transition', [KitchenMonitorController::class, 'transition'])->name('kitchen-monitor.items.transition');
 
     Route::get('/settings/restaurant', [RestaurantSettingsController::class, 'edit'])
         ->name('settings.restaurant.edit');
