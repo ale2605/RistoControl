@@ -8,11 +8,24 @@
 </head>
 <body class="bg-slate-100 min-h-screen text-slate-900">
     <div class="min-h-screen md:flex">
+        @php $user = auth()->user(); @endphp
         <aside class="w-full md:w-64 bg-slate-900 text-white p-4">
             <h1 class="text-2xl font-bold">RistoControl</h1>
             <p class="text-slate-300 text-sm mt-1">Gestionale ristorante</p>
             <nav class="mt-6 space-y-2">
                 <a href="{{ route('dashboard') }}" class="block rounded-lg px-3 py-2 bg-slate-800">Dashboard</a>
+
+                @if ($user?->hasRole('owner', 'manager', 'super_admin'))
+                    <a href="{{ route('settings.restaurant.edit') }}" class="block rounded-lg px-3 py-2 hover:bg-slate-800">Impostazioni ristorante</a>
+                @endif
+
+                @if ($user?->hasRole('accountant', 'owner', 'manager', 'super_admin'))
+                    <span class="block rounded-lg px-3 py-2 text-slate-300">Contabilità</span>
+                @endif
+
+                @if ($user?->hasRole('kitchen', 'owner', 'manager', 'super_admin'))
+                    <span class="block rounded-lg px-3 py-2 text-slate-300">Cucina</span>
+                @endif
             </nav>
         </aside>
         <main class="flex-1 p-4 md:p-8">

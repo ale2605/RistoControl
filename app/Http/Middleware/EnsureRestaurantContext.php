@@ -12,8 +12,16 @@ class EnsureRestaurantContext
     {
         $user = $request->user();
 
-        if (! $user || ! $user->restaurant_id) {
+        if (! $user) {
+            abort(401);
+        }
+
+        if (! $user->isSuperAdmin() && ! $user->restaurant_id) {
             abort(403, 'Utente non associato a un ristorante.');
+        }
+
+        if (! $user->isSuperAdmin()) {
+            app()->instance('currentRestaurantId', $user->restaurant_id);
         }
 
         return $next($request);
