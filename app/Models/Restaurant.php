@@ -14,6 +14,8 @@ class Restaurant extends Model
         'name',
         'business_name',
         'slug',
+        'public_slug',
+        'show_unavailable_items',
         'vat_number',
         'email',
         'phone',
@@ -23,6 +25,10 @@ class Restaurant extends Model
         'max_covers_lunch',
         'max_covers_dinner',
         'default_booking_duration_minutes',
+    ];
+
+    protected $casts = [
+        'show_unavailable_items' => 'boolean',
     ];
 
     public function users(): HasMany

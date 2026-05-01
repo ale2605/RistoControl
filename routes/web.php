@@ -5,12 +5,15 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RestaurantSettingsController;
 use App\Http\Controllers\MenuCategoryController;
 use App\Http\Controllers\MenuItemController;
+use App\Http\Controllers\PublicMenuController;
 use App\Http\Middleware\EnsureRestaurantContext;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/m/{publicSlug}', [PublicMenuController::class, 'show'])->name('public.menu.show');
 
 Route::middleware(['auth', EnsureRestaurantContext::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
