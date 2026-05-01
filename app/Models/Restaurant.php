@@ -20,6 +20,9 @@ class Restaurant extends Model
         'address',
         'logo',
         'opening_hours',
+        'max_covers_lunch',
+        'max_covers_dinner',
+        'default_booking_duration_minutes',
     ];
 
     public function users(): HasMany

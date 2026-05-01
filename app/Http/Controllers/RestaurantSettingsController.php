@@ -37,6 +37,9 @@ class RestaurantSettingsController extends Controller
             'address' => ['nullable', 'string', 'max:500'],
             'logo' => ['nullable', 'url', 'max:2048'],
             'opening_hours' => ['nullable', 'string', 'max:2000'],
+            'max_covers_lunch' => ['required', 'integer', 'min:0', 'max:5000'],
+            'max_covers_dinner' => ['required', 'integer', 'min:0', 'max:5000'],
+            'default_booking_duration_minutes' => ['required', 'integer', 'min:15', 'max:480'],
         ]);
 
         $restaurant->update($validated);

@@ -1,6 +1,7 @@
 <x-layouts.app :title="($booking->exists ? 'Modifica' : 'Nuova').' prenotazione | RistoControl'">
     <div class="flex items-center justify-between mb-6">
         <h2 class="text-2xl font-semibold">{{ $booking->exists ? 'Modifica prenotazione' : 'Nuova prenotazione' }}</h2>
+        <p class="text-sm text-slate-500">Durata standard: {{ $defaultDuration }} minuti</p>
         <a href="{{ route('bookings.index') }}" class="text-sm text-slate-600">Torna elenco</a>
     </div>
 
