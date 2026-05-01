@@ -50,4 +50,14 @@ class Restaurant extends Model
     {
         return $this->hasMany(MenuItem::class);
     }
+
+    public function diningAreas(): HasMany
+    {
+        return $this->hasMany(DiningArea::class);
+    }
+
+    public function tables(): HasMany
+    {
+        return $this->hasMany(Table::class);
+    }
 }

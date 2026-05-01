@@ -16,6 +16,7 @@ class Booking extends Model
 
     protected $fillable = [
         'restaurant_id',
+        'table_id',
         'customer_name',
         'customer_phone',
         'customer_email',
@@ -36,6 +37,11 @@ class Booking extends Model
     public function restaurant(): BelongsTo
     {
         return $this->belongsTo(Restaurant::class);
+    }
+
+    public function table(): BelongsTo
+    {
+        return $this->belongsTo(Table::class);
     }
 
     public function creator(): BelongsTo

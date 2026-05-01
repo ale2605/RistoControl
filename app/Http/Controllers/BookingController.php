@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\Table;
 use App\Support\ResolvesCurrentRestaurant;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -103,6 +104,7 @@ class BookingController extends Controller
             'statuses' => Booking::STATUSES,
             'sources' => Booking::SOURCES,
             'defaultDuration' => (int) ($restaurant->default_booking_duration_minutes ?? 120),
+            'tables' => Table::where('restaurant_id', $restaurant->id)->orderBy('name')->get(),
         ]);
     }
 
@@ -131,6 +133,7 @@ class BookingController extends Controller
             'statuses' => Booking::STATUSES,
             'sources' => Booking::SOURCES,
             'defaultDuration' => (int) ($restaurant->default_booking_duration_minutes ?? 120),
+            'tables' => Table::where('restaurant_id', $restaurant->id)->orderBy('name')->get(),
         ]);
     }
 
@@ -171,6 +174,7 @@ class BookingController extends Controller
     private function validateBooking(Request $request): array
     {
         return $request->validate([
+            'table_id' => ['nullable', Rule::exists('tables', 'id')->where('restaurant_id', $this->currentRestaurant($request)?->id)],
             'customer_name' => ['required', 'string', 'max:255'],
             'customer_phone' => ['required', 'string', 'max:50'],
             'customer_email' => ['nullable', 'email', 'max:255'],

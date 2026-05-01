@@ -42,6 +42,16 @@
         </label>
 
         <label class="block md:col-span-2">
+            <span class="text-sm text-slate-600">Tavolo associato</span>
+            <select name="table_id" class="mt-1 w-full rounded-lg border-slate-300">
+                <option value="">Nessuno</option>
+                @foreach($tables as $table)
+                    <option value="{{ $table->id }}" @selected((string) old('table_id', $booking->table_id) === (string) $table->id)>{{ $table->name }} ({{ $table->seats }} coperti)</option>
+                @endforeach
+            </select>
+        </label>
+
+        <label class="block md:col-span-2">
             <span class="text-sm text-slate-600">Fonte</span>
             <select name="source" class="mt-1 w-full rounded-lg border-slate-300" required>
                 @foreach($sources as $source)
