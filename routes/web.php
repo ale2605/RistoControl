@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RestaurantSettingsController;
 use App\Http\Controllers\MenuCategoryController;
 use App\Http\Controllers\MenuItemController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PublicMenuController;
 use App\Http\Controllers\DiningAreaController;
 use App\Http\Controllers\TableController;
@@ -25,6 +26,9 @@ Route::middleware(['auth', EnsureRestaurantContext::class])->group(function () {
     Route::resource('menu-items', MenuItemController::class)->except(['show']);
     Route::resource('dining-areas', DiningAreaController::class)->except(['show']);
     Route::resource('tables', TableController::class)->except(['show']);
+    Route::resource('orders', OrderController::class)->only(['index','create','store','show']);
+    Route::patch('/orders/{order}/send', [OrderController::class, 'send'])->name('orders.send');
+    Route::patch('/orders/{order}/items/{item}/status', [OrderController::class, 'updateItemStatus'])->name('orders.items.status');
     Route::patch('/tables/{table}/quick-status', [TableController::class, 'quickStatus'])->name('tables.quick-status');
     Route::get('/room/dashboard', [TableController::class, 'roomDashboard'])->name('room.dashboard');
     Route::patch('/bookings/{booking}/quick-status', [BookingController::class, 'quickStatus'])->name('bookings.quick-status');

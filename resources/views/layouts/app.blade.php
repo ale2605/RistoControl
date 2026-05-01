@@ -17,6 +17,7 @@
 
                 <a href="{{ route('bookings.index') }}" class="block rounded-lg px-3 py-2 hover:bg-slate-800">Prenotazioni</a>
                 <a href="{{ route('room.dashboard') }}" class="block rounded-lg px-3 py-2 hover:bg-slate-800">Sala (oggi)</a>
+                <a href="{{ route('orders.index') }}" class="block rounded-lg px-3 py-2 hover:bg-slate-800">Comande</a>
                 <a href="{{ route('dining-areas.index') }}" class="block rounded-lg px-3 py-2 hover:bg-slate-800">Sale</a>
                 <a href="{{ route('tables.index') }}" class="block rounded-lg px-3 py-2 hover:bg-slate-800">Tavoli</a>
                 <a href="{{ route('menu-categories.index') }}" class="block rounded-lg px-3 py-2 hover:bg-slate-800">Categorie menù</a>

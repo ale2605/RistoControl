@@ -29,4 +29,9 @@ class Table extends Model
     {
         return $this->hasMany(Booking::class);
     }
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
 }
