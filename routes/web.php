@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RestaurantSettingsController;
 use App\Http\Middleware\EnsureRestaurantContext;
 use Illuminate\Support\Facades\Route;
@@ -9,9 +11,10 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', EnsureRestaurantContext::class])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard.index');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::resource('bookings', BookingController::class);
+    Route::patch('/bookings/{booking}/quick-status', [BookingController::class, 'quickStatus'])->name('bookings.quick-status');
 
     Route::get('/settings/restaurant', [RestaurantSettingsController::class, 'edit'])
         ->name('settings.restaurant.edit');
