@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Support\ResolvesCurrentRestaurant;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -23,7 +24,13 @@ class BookingController extends Controller
             'meal_shift' => ['nullable', Rule::in(Booking::MEAL_SHIFTS)],
             'status' => ['nullable', Rule::in(Booking::STATUSES)],
             'search' => ['nullable', 'string', 'max:255'],
+            'month' => ['nullable', 'date_format:Y-m'],
+            'view' => ['nullable', Rule::in(['list', 'month', 'day'])],
         ]);
+
+        $selectedDate = Carbon::parse($filters['date'] ?? now()->toDateString());
+        $selectedMonth = Carbon::parse(($filters['month'] ?? now()->format('Y-m')).'-01');
+        $activeView = $filters['view'] ?? 'month';
 
         $bookings = Booking::query()
             ->where('restaurant_id', $restaurant->id)
@@ -42,17 +49,46 @@ class BookingController extends Controller
             ->paginate(15)
             ->withQueryString();
 
+        $monthlyBookings = Booking::query()
+            ->where('restaurant_id', $restaurant->id)
+            ->whereBetween('booking_date', [$selectedMonth->copy()->startOfMonth(), $selectedMonth->copy()->endOfMonth()])
+            ->get(['id', 'booking_date', 'meal_shift', 'guests_count']);
+
+        $coversByDay = [];
+        foreach ($monthlyBookings->groupBy(fn ($booking) => $booking->booking_date->toDateString()) as $date => $dailyBookings) {
+            $coversByDay[$date] = [
+                'lunch' => (int) $dailyBookings->where('meal_shift', 'lunch')->sum('guests_count'),
+                'dinner' => (int) $dailyBookings->where('meal_shift', 'dinner')->sum('guests_count'),
+                'total' => (int) $dailyBookings->sum('guests_count'),
+            ];
+        }
+
+        $dailyTimeline = Booking::query()
+            ->where('restaurant_id', $restaurant->id)
+            ->whereDate('booking_date', $selectedDate)
+            ->orderBy('meal_shift')
+            ->orderBy('booking_time')
+            ->get();
+
         return view('bookings.index', [
             'bookings' => $bookings,
             'filters' => $filters,
             'mealShifts' => Booking::MEAL_SHIFTS,
             'statuses' => Booking::STATUSES,
+            'selectedDate' => $selectedDate,
+            'selectedMonth' => $selectedMonth,
+            'activeView' => $activeView,
+            'coversByDay' => $coversByDay,
+            'dailyTimeline' => $dailyTimeline,
+            'maxLunch' => (int) ($restaurant->max_covers_lunch ?? 0),
+            'maxDinner' => (int) ($restaurant->max_covers_dinner ?? 0),
         ]);
     }
 
     public function create(Request $request): View
     {
-        abort_unless($this->currentRestaurant($request), 404);
+        $restaurant = $this->currentRestaurant($request);
+        abort_unless($restaurant, 404);
 
         return view('bookings.form', [
             'booking' => new Booking([
@@ -66,6 +102,7 @@ class BookingController extends Controller
             'mealShifts' => Booking::MEAL_SHIFTS,
             'statuses' => Booking::STATUSES,
             'sources' => Booking::SOURCES,
+            'defaultDuration' => (int) ($restaurant->default_booking_duration_minutes ?? 120),
         ]);
     }
 
@@ -93,6 +130,7 @@ class BookingController extends Controller
             'mealShifts' => Booking::MEAL_SHIFTS,
             'statuses' => Booking::STATUSES,
             'sources' => Booking::SOURCES,
+            'defaultDuration' => (int) ($restaurant->default_booking_duration_minutes ?? 120),
         ]);
     }
 

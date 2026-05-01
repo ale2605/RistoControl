@@ -39,6 +39,18 @@
             <span class="text-sm text-slate-600">Orari apertura</span>
             <textarea name="opening_hours" rows="4" class="mt-1 w-full rounded-lg border-slate-300">{{ old('opening_hours', $restaurant->opening_hours) }}</textarea>
         </label>
+        <label class="block">
+            <span class="text-sm text-slate-600">Capienza massima pranzo</span>
+            <input type="number" min="0" name="max_covers_lunch" value="{{ old('max_covers_lunch', $restaurant->max_covers_lunch ?? 0) }}" class="mt-1 w-full rounded-lg border-slate-300" required>
+        </label>
+        <label class="block">
+            <span class="text-sm text-slate-600">Capienza massima cena</span>
+            <input type="number" min="0" name="max_covers_dinner" value="{{ old('max_covers_dinner', $restaurant->max_covers_dinner ?? 0) }}" class="mt-1 w-full rounded-lg border-slate-300" required>
+        </label>
+        <label class="block md:col-span-2">
+            <span class="text-sm text-slate-600">Durata prenotazione predefinita (minuti)</span>
+            <input type="number" min="15" step="15" name="default_booking_duration_minutes" value="{{ old('default_booking_duration_minutes', $restaurant->default_booking_duration_minutes ?? 120) }}" class="mt-1 w-full rounded-lg border-slate-300" required>
+        </label>
         <div class="md:col-span-2">
             <button class="rounded-lg bg-slate-900 text-white px-4 py-2">Salva</button>
         </div>
