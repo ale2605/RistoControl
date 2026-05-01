@@ -16,6 +16,8 @@
                 <a href="{{ route('dashboard') }}" class="block rounded-lg px-3 py-2 bg-slate-800">Dashboard</a>
 
                 <a href="{{ route('bookings.index') }}" class="block rounded-lg px-3 py-2 hover:bg-slate-800">Prenotazioni</a>
+                <a href="{{ route('menu-categories.index') }}" class="block rounded-lg px-3 py-2 hover:bg-slate-800">Categorie menù</a>
+                <a href="{{ route('menu-items.index') }}" class="block rounded-lg px-3 py-2 hover:bg-slate-800">Piatti / Prodotti</a>
 
                 @if ($user?->hasRole('owner', 'manager', 'super_admin'))
                     <a href="{{ route('settings.restaurant.edit') }}" class="block rounded-lg px-3 py-2 hover:bg-slate-800">Impostazioni ristorante</a>
